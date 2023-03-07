@@ -84,31 +84,43 @@ scene("game", () => {
 
   const player = get("player")[0];
 
+  player.onUpdate(() => {});
+
   //   movement
   onKeyDown("left", () => {
-    player.move(-MOVE_SPEED, 0);
-    // h, v
-    player.dir = vec2(-1, 0);
+    if (!isKeyDown("up") && !isKeyDown("down")) {
+      player.move(-MOVE_SPEED, 0);
+      // h, v
+      player.dir = vec2(-1, 0);
+    }
   });
 
   onKeyDown("right", () => {
-    player.move(MOVE_SPEED, 0);
-    player.dir = vec2(1, 0);
+    if (!isKeyDown("up") && !isKeyDown("down")) {
+      player.move(MOVE_SPEED, 0);
+      player.dir = vec2(1, 0);
+    }
   });
 
   onKeyDown("up", () => {
-    player.move(0, -MOVE_SPEED);
-    player.dir = vec2(0, -1);
+    if (!isKeyDown("left") && !isKeyDown("right")) {
+      player.move(0, -MOVE_SPEED);
+      player.dir = vec2(0, -1);
+    }
   });
 
   onKeyDown("down", () => {
-    player.move(0, MOVE_SPEED);
-    player.dir = vec2(0, 1);
+    if (!isKeyDown("left") && !isKeyDown("right")) {
+      player.move(0, MOVE_SPEED);
+      player.dir = vec2(0, 1);
+    }
   });
 
   //   animations
   onKeyPress("left", () => {
-    player.play("moveLeft");
+    if (!isKeyDown("up") && !isKeyDown("down")) {
+      player.play("moveLeft");
+    }
   });
 
   onKeyPress("right", () => {
