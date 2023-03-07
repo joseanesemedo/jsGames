@@ -109,12 +109,13 @@ scene("game", () => {
   //   }
   // });
 
-  player.direction = "horizontal";
+  player.previousDir = "down"; // not being used, could help avoid first key down after releasing second key not working
+  player.direction = "down";
   player.currSprite = true;
   //   movement
   onKeyDown("left", () => {
     //if (!isKeyDown("up") && !isKeyDown("down")) {
-    if (player.direction === "horizontal") {
+    if (player.direction === "left") {
       player.move(-MOVE_SPEED, 0);
       // h, v;
       // player.dir = vec2(-1, 0);
@@ -123,19 +124,19 @@ scene("game", () => {
 
   onKeyDown("right", () => {
     //if (!isKeyDown("up") && !isKeyDown("down")) {
-    if (player.direction === "horizontal") {
+    if (player.direction === "right") {
       player.move(MOVE_SPEED, 0);
-      if (player.currSprite) {
-        player.play("moveRight");
-        player.currSprite = false;
-      }
+      // if (player.currSprite) {
+
+      //   player.currSprite = false;
+      // }
       // player.dir = vec2(1, 0);
     }
   });
 
   onKeyDown("up", () => {
     //if (!isKeyDown("left") && !isKeyDown("right")) {
-    if (player.direction === "vertical") {
+    if (player.direction === "up") {
       player.move(0, -MOVE_SPEED);
       // player.dir = vec2(0, -1);
     }
@@ -143,7 +144,7 @@ scene("game", () => {
 
   onKeyDown("down", () => {
     //if (!isKeyDown("left") && !isKeyDown("right")) {
-    if (player.direction === "vertical") {
+    if (player.direction === "down") {
       player.move(0, MOVE_SPEED);
       // player.dir = vec2(0, 1);
     }
@@ -151,13 +152,13 @@ scene("game", () => {
 
   //   animations
   onKeyPress("left", () => {
-    player.direction = "horizontal";
+    player.direction = "left";
     player.play("moveLeft");
   });
 
   onKeyPress("right", () => {
-    player.direction = "horizontal";
-
+    player.direction = "right";
+    player.play("moveRight");
     // if (player.currSprite) {
     //   player.play("moveRight");
     //   player.currSprite = false;
@@ -165,30 +166,38 @@ scene("game", () => {
   });
 
   onKeyPress("up", () => {
-    player.direction = "vertical";
+    player.direction = "up";
     player.play("moveUp");
   });
 
   onKeyPress("down", () => {
-    player.direction = "vertical";
+    player.direction = "down";
     player.play("moveDown");
   });
 
-  // onKeyRelease(["left"], () => {
-  //   player.play("idleLeft");
-  // });
+  onKeyRelease(["left"], () => {
+    if (!isKeyDown("up") && !isKeyDown("down") && !isKeyDown("right")) {
+      player.play("idleLeft");
+    }
+  });
 
-  // onKeyRelease(["right"], () => {
-  //   player.play("idleRight");
-  // });
+  onKeyRelease(["right"], () => {
+    if (!isKeyDown("up") && !isKeyDown("down") && !isKeyDown("left")) {
+      player.play("idleRight");
+    }
+  });
 
-  // onKeyRelease(["up"], () => {
-  //   player.play("idleUp");
-  // });
+  onKeyRelease(["up"], () => {
+    if (!isKeyDown("left") && !isKeyDown("down") && !isKeyDown("right")) {
+      player.play("idleUp");
+    }
+  });
 
-  // onKeyRelease(["down"], () => {
-  //   player.play("idleDown");
-  // });
+  onKeyRelease(["down"], () => {
+    if (!isKeyDown("up") && !isKeyDown("left") && !isKeyDown("right")) {
+      player.play("idleDown");
+    }
+  });
 });
 
 go("game");
