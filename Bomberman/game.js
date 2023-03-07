@@ -47,7 +47,7 @@ scene("game", () => {
       "a             a",
       "a             a",
       "a             a",
-      "a             a",
+      "a     j       a",
       "a             a",
       "a             a",
       "a             a",
@@ -67,22 +67,22 @@ scene("game", () => {
     w: () => [sprite("brick-wood"), "wall-brick", area(), solid(), "wall"],
     p: () => [sprite("brick-wood"), "wall-brick-door", area(), solid(), "wall"],
     t: () => [sprite("door"), "door", "wall"],
+    j: () => [sprite("bomberman"), area(), solid(), "player"],
   };
 
   const gameLevel = addLevel(maps[0], levelsCfg);
 
-  const player = add([
-    sprite("bomberman", {
-      animeSpeed: 0.1,
-      frame: 14,
-    }),
-    pos(30, 190),
-    { dir: vec2(1, 0) },
-  ]);
+  //   const player = add([
+  //     sprite("bomberman", {
+  //       animeSpeed: 0.1,
+  //       frame: 14,
+  //     }),
+  //     pos(30, 190),
+  //     area(),
+  //     { dir: vec2(1, 0) },
+  //   ]);
 
-  //   player.action(() => {
-  //     player.pushOutAll();
-  //   });
+  const player = get("player")[0];
 
   //   movement
   onKeyDown("left", () => {
