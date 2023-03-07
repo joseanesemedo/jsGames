@@ -84,71 +84,111 @@ scene("game", () => {
 
   const player = get("player")[0];
 
-  player.onUpdate(() => {});
+  // player.direction = "down";
 
+  // player.onUpdate(() => {
+  //   switch (player.direction) {
+  //     case "left":
+  //       player.play("moveLeft");
+  //       player.move(-MOVE_SPEED, 0);
+  //       console.log("LEFTT");
+  //       break;
+  //     case "right":
+  //       player.play("moveRight");
+  //       player.move(MOVE_SPEED, 0);
+  //       break;
+  //     case "up":
+  //       player.play("moveUp");
+  //       player.move(0, -MOVE_SPEED);
+  //       break;
+  //     case "down":
+  //       player.play("moveDown");
+  //       player.move(0, MOVE_SPEED);
+
+  //       break;
+  //   }
+  // });
+
+  player.direction = "horizontal";
+  player.currSprite = true;
   //   movement
   onKeyDown("left", () => {
-    if (!isKeyDown("up") && !isKeyDown("down")) {
+    //if (!isKeyDown("up") && !isKeyDown("down")) {
+    if (player.direction === "horizontal") {
       player.move(-MOVE_SPEED, 0);
-      // h, v
-      player.dir = vec2(-1, 0);
+      // h, v;
+      // player.dir = vec2(-1, 0);
     }
   });
 
   onKeyDown("right", () => {
-    if (!isKeyDown("up") && !isKeyDown("down")) {
+    //if (!isKeyDown("up") && !isKeyDown("down")) {
+    if (player.direction === "horizontal") {
       player.move(MOVE_SPEED, 0);
-      player.dir = vec2(1, 0);
+      if (player.currSprite) {
+        player.play("moveRight");
+        player.currSprite = false;
+      }
+      // player.dir = vec2(1, 0);
     }
   });
 
   onKeyDown("up", () => {
-    if (!isKeyDown("left") && !isKeyDown("right")) {
+    //if (!isKeyDown("left") && !isKeyDown("right")) {
+    if (player.direction === "vertical") {
       player.move(0, -MOVE_SPEED);
-      player.dir = vec2(0, -1);
+      // player.dir = vec2(0, -1);
     }
   });
 
   onKeyDown("down", () => {
-    if (!isKeyDown("left") && !isKeyDown("right")) {
+    //if (!isKeyDown("left") && !isKeyDown("right")) {
+    if (player.direction === "vertical") {
       player.move(0, MOVE_SPEED);
-      player.dir = vec2(0, 1);
+      // player.dir = vec2(0, 1);
     }
   });
 
   //   animations
   onKeyPress("left", () => {
-    if (!isKeyDown("up") && !isKeyDown("down")) {
-      player.play("moveLeft");
-    }
+    player.direction = "horizontal";
+    player.play("moveLeft");
   });
 
   onKeyPress("right", () => {
-    player.play("moveRight");
+    player.direction = "horizontal";
+
+    // if (player.currSprite) {
+    //   player.play("moveRight");
+    //   player.currSprite = false;
+    // }
   });
 
   onKeyPress("up", () => {
+    player.direction = "vertical";
     player.play("moveUp");
   });
 
   onKeyPress("down", () => {
+    player.direction = "vertical";
     player.play("moveDown");
   });
 
-  onKeyRelease(["left"], () => {
-    player.play("idleLeft");
-  });
+  // onKeyRelease(["left"], () => {
+  //   player.play("idleLeft");
+  // });
 
-  onKeyRelease(["right"], () => {
-    player.play("idleRight");
-  });
+  // onKeyRelease(["right"], () => {
+  //   player.play("idleRight");
+  // });
 
-  onKeyRelease(["up"], () => {
-    player.play("idleUp");
-  });
-  onKeyRelease(["down"], () => {
-    player.play("idleDown");
-  });
+  // onKeyRelease(["up"], () => {
+  //   player.play("idleUp");
+  // });
+
+  // onKeyRelease(["down"], () => {
+  //   player.play("idleDown");
+  // });
 });
 
 go("game");
