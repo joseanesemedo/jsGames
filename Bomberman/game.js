@@ -34,6 +34,14 @@ loadSprite("bomberman", "./sprites/player.png", {
   },
 });
 
+loadSprite("bomb", "./sprites/bomb.png", {
+  sliceX: 3,
+  anims: { from: 0, to: 2 },
+});
+loadSprite("enemy1", "./sprites/enemy1.png", { sliceX: 3 });
+loadSprite("enemy2", "./sprites/enemy2.png", { sliceX: 3 });
+loadSprite("enemy3", "./sprites/enemy3.png", { sliceX: 3 });
+
 scene("game", () => {
   layers(["bg", "obj", "ui"], "obj");
 
@@ -41,9 +49,9 @@ scene("game", () => {
     [
       "aaaaaaaaaaaaaaa",
       "a             a",
+      "a   %         a",
       "a             a",
-      "a             a",
-      "a             a",
+      "a        #    a",
       "a             a",
       "a             a",
       "a             a",
@@ -51,7 +59,7 @@ scene("game", () => {
       "a             a",
       "a             a",
       "a             a",
-      "a             a",
+      "a  @          a",
       "a             a",
       "aaaaaaaaaaaaaaa",
     ],
@@ -68,9 +76,14 @@ scene("game", () => {
     p: () => [sprite("brick-wood"), "wall-brick-door", area(), solid(), "wall"],
     t: () => [sprite("door"), "door", "wall"],
     j: () => [sprite("bomberman"), area(), solid(), "player"],
+    "#": () => [sprite("enemy2"), "ghost", "dangerous", { dir: -1, time: 0 }],
+    "@": () => [sprite("enemy3"), "slime", "dangerous", { time: 0 }],
+    "%": () => [sprite("enemy1"), "baloon", "dangerous", { time: 0 }],
   };
 
   const gameLevel = addLevel(maps[0], levelsCfg);
+
+  add([sprite("bg"), layer("bg")]);
 
   const player = get("player")[0];
 
