@@ -9,10 +9,10 @@ kaboom({
 const MOVE_SPEED = 120;
 const ENEMY_SPEED = 60;
 
+//=================================================Loading Sprites=======================================================
 loadSprite("wall-steel", "./sprites/wall.png");
 loadSprite("brick-red", "./sprites/brick.png");
 loadSprite("door", "./sprites/door.png");
-loadSprite("explosion", "./sprites/explosion.png");
 loadSprite("brick-wood", "./sprites/wood.png");
 loadSprite("wall-gold", "./sprites/gold.png");
 loadSprite("bg", "./sprites/bg.png");
@@ -37,7 +37,12 @@ loadSprite("bomberman", "./sprites/player.png", {
 
 loadSprite("bomb", "./sprites/bomb.png", {
   sliceX: 3,
-  anims: { from: 0, to: 2 },
+  anims: { move: { from: 0, to: 2, loop: true } },
+});
+
+loadSprite("explosion", "./sprites/explosion.png", {
+  sliceX: 5,
+  sliceY: 5,
 });
 loadSprite("enemy1", "./sprites/enemy1.png", { sliceX: 3 });
 loadSprite("enemy2", "./sprites/enemy2.png", { sliceX: 3 });
@@ -49,20 +54,36 @@ scene("game", () => {
   const maps = [
     [
       "aaaaaaaaaaaaaaa",
+      "aj            a",
       "a             a",
       "a   %         a",
       "a             a",
-      "a        #    a",
+      "a             a",
+      "a             a",
+      "a         #   a",
       "a             a",
       "a             a",
       "a             a",
-      "a     j       a",
+      "a   @         a",
       "a             a",
-      "a             a",
-      "a             a",
-      "a  @          a",
       "a             a",
       "aaaaaaaaaaaaaaa",
+
+      // "aaaaaaaaaaaaaaa",
+      // "aj            a",
+      // "a a a a a a a a",
+      // "a   %         a",
+      // "a a a a a a#a a",
+      // "a             a",
+      // "a a a a a a a a",
+      // "a             a",
+      // "a a a a a a a a",
+      // "a             a",
+      // "a a a a a a a a",
+      // "a   @         a",
+      // "a a a a a a a a",
+      // "a             a",
+      // "aaaaaaaaaaaaaaa",
     ],
   ];
 
@@ -76,7 +97,7 @@ scene("game", () => {
     w: () => [sprite("brick-wood"), "wall-brick", area(), solid(), "wall"],
     p: () => [sprite("brick-wood"), "wall-brick-door", area(), solid(), "wall"],
     t: () => [sprite("door"), "door", "wall"],
-    j: () => [sprite("bomberman"), area(), solid(), "player"],
+    j: () => [sprite("bomberman"), area(), solid(), "player", scale(1.0)],
     "#": () => [
       sprite("enemy2"),
       "ghost",
@@ -200,6 +221,10 @@ scene("game", () => {
     }
   });
 
+  onKeyPress("d", () => {
+    spawnBomb(player.pos.add(player.gridPos.sub(0, 0)));
+  });
+
   // enemies actions
   onUpdate("baloon", (s) => {
     // s.pushOutAll();
@@ -229,6 +254,64 @@ scene("game", () => {
       s.time = rand(5);
     }
   });
+
+  //=================================================Functions=======================================================
+
+  function spawnExplosion(p, frame) {
+    const obj = add([
+      sprite("explosion", {
+        animeSpeed: 0.1,
+        frame: frame,
+      }),
+      pos(p),
+      scale(1.5),
+      "explosion",
+      solid(),
+      area(),
+    ]);
+
+    wait(0.5, () => {
+      destroy(obj);
+    });
+  }
+
+  function spawnBomb(p) {
+    const obj = add([
+      sprite("bomb"),
+      "move",
+      pos(p),
+      scale(1.5),
+      "bomb",
+      solid(),
+      area(),
+    ]);
+    // obj.pushOutAll();
+    obj.play("move");
+
+    wait(2, () => {
+      destroy(obj);
+
+      //center
+      obj.dir = vec2(1, 0);
+      spawnExplosion(obj.pos.add(obj.dir.scale(0)), 12);
+
+      //up
+      obj.dir = vec2(0, -1);
+      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 2);
+
+      //down
+      obj.dir = vec2(0, 1);
+      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 22);
+
+      //left
+      obj.dir = vec2(-1, 0);
+      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 10);
+
+      //right
+      obj.dir = vec2(1, 0);
+      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 14);
+    });
+  }
 });
 
 go("game");
