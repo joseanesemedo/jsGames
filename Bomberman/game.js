@@ -3,7 +3,7 @@ kaboom({
   fullscreen: true,
   scale: 2,
   debug: true,
-  clearColor: [0, 0, 0, 1],
+  background: [0, 0, 0, 1],
 });
 
 const MOVE_SPEED = 120;
@@ -72,42 +72,7 @@ scene("game", () => {
 
   const gameLevel = addLevel(maps[0], levelsCfg);
 
-  //   const player = add([
-  //     sprite("bomberman", {
-  //       animeSpeed: 0.1,
-  //       frame: 14,
-  //     }),
-  //     pos(30, 190),
-  //     area(),
-  //     { dir: vec2(1, 0) },
-  //   ]);
-
   const player = get("player")[0];
-
-  // player.direction = "down";
-
-  // player.onUpdate(() => {
-  //   switch (player.direction) {
-  //     case "left":
-  //       player.play("moveLeft");
-  //       player.move(-MOVE_SPEED, 0);
-  //       console.log("LEFTT");
-  //       break;
-  //     case "right":
-  //       player.play("moveRight");
-  //       player.move(MOVE_SPEED, 0);
-  //       break;
-  //     case "up":
-  //       player.play("moveUp");
-  //       player.move(0, -MOVE_SPEED);
-  //       break;
-  //     case "down":
-  //       player.play("moveDown");
-  //       player.move(0, MOVE_SPEED);
-
-  //       break;
-  //   }
-  // });
 
   player.previousDir = "down"; // not being used, could help avoid first key down after releasing second key not working
   player.direction = "down";
