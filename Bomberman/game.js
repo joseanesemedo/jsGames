@@ -7,6 +7,7 @@ kaboom({
 });
 
 const MOVE_SPEED = 120;
+const ENEMY_SPEED = 60;
 
 loadSprite("wall-steel", "./sprites/wall.png");
 loadSprite("brick-red", "./sprites/brick.png");
@@ -76,9 +77,30 @@ scene("game", () => {
     p: () => [sprite("brick-wood"), "wall-brick-door", area(), solid(), "wall"],
     t: () => [sprite("door"), "door", "wall"],
     j: () => [sprite("bomberman"), area(), solid(), "player"],
-    "#": () => [sprite("enemy2"), "ghost", "dangerous", { dir: -1, time: 0 }],
-    "@": () => [sprite("enemy3"), "slime", "dangerous", { time: 0 }],
-    "%": () => [sprite("enemy1"), "baloon", "dangerous", { time: 0 }],
+    "#": () => [
+      sprite("enemy2"),
+      "ghost",
+      "dangerous",
+      area(),
+      solid(),
+      { dir: -1, time: 0 },
+    ],
+    "@": () => [
+      sprite("enemy3"),
+      "slime",
+      "dangerous",
+      area(),
+      solid(),
+      { dir: -1, time: 0 },
+    ],
+    "%": () => [
+      sprite("enemy1"),
+      "baloon",
+      "dangerous",
+      area(),
+      solid(),
+      { dir: -1, time: 0 },
+    ],
   };
 
   const gameLevel = addLevel(maps[0], levelsCfg);
@@ -90,7 +112,8 @@ scene("game", () => {
   player.previousDir = "down"; // not being used, could help avoid first key down after releasing second key not working
   player.direction = "down";
   player.currSprite = true;
-  //   movement
+
+  //  player movements
   onKeyDown("left", () => {
     //if (!isKeyDown("up") && !isKeyDown("down")) {
     if (player.direction === "left") {
@@ -128,7 +151,7 @@ scene("game", () => {
     }
   });
 
-  //   animations
+  //  player animations
   onKeyPress("left", () => {
     player.direction = "left";
     player.play("moveLeft");
@@ -174,6 +197,36 @@ scene("game", () => {
   onKeyRelease(["down"], () => {
     if (!isKeyDown("up") && !isKeyDown("left") && !isKeyDown("right")) {
       player.play("idleDown");
+    }
+  });
+
+  // enemies actions
+  onUpdate("baloon", (s) => {
+    // s.pushOutAll();
+    s.move(s.dir * ENEMY_SPEED, 0);
+    s.time -= dt();
+    if (s.time <= 0) {
+      // change direction
+      s.dir = -s.dir;
+      s.time = rand(5);
+    }
+  });
+
+  onUpdate("slime", (s) => {
+    s.move(s.dir * ENEMY_SPEED, 0);
+    s.time -= dt();
+    if (s.time <= 0) {
+      s.dir = -s.dir;
+      s.time = rand(5);
+    }
+  });
+
+  onUpdate("ghost", (s) => {
+    s.move(0, s.dir * ENEMY_SPEED);
+    s.time -= dt();
+    if (s.time <= 0) {
+      s.dir = -s.dir;
+      s.time = rand(5);
     }
   });
 });
