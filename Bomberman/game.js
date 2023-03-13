@@ -8,6 +8,7 @@ kaboom({
 
 const MOVE_SPEED = 120;
 const ENEMY_SPEED = 60;
+let bombsNumber = 1;
 
 //=================================================Loading Sprites=======================================================
 loadSprite("wall-steel", "./sprites/wall.png");
@@ -242,7 +243,7 @@ scene("game", () => {
     s.time -= dt();
     if (s.time <= 0) {
       s.dir = -s.dir;
-      s.time = rand(5);
+      s.time = rand(15);
     }
   });
 
@@ -253,6 +254,10 @@ scene("game", () => {
       s.dir = -s.dir;
       s.time = rand(5);
     }
+  });
+
+  player.onCollide("enemy1", (enemy) => {
+    bombsNumber++;
   });
 
   //=================================================Functions=======================================================
@@ -266,8 +271,8 @@ scene("game", () => {
       pos(p),
       scale(1.5),
       "explosion",
-      solid(),
       area(),
+      solid(),
     ]);
 
     wait(0.5, () => {
@@ -276,41 +281,48 @@ scene("game", () => {
   }
 
   function spawnBomb(p) {
-    const obj = add([
-      sprite("bomb"),
-      "move",
-      pos(p),
-      scale(1.5),
-      "bomb",
-      solid(),
-      area(),
-    ]);
-    // obj.pushOutAll();
-    obj.play("move");
+    if (bombsNumber > 0) {
+      bombsNumber--;
+      const obj = add([
+        sprite("bomb"),
+        "move",
+        pos(p),
+        scale(1.5),
+        "bomb",
+        solid(),
+        area(),
+      ]);
+      // obj.pushOutAll();
+      obj.play("move");
 
-    wait(2, () => {
-      destroy(obj);
+      wait(2, () => {
+        destroy(obj);
 
-      //center
-      obj.dir = vec2(1, 0);
-      spawnExplosion(obj.pos.add(obj.dir.scale(0)), 12);
+        //center
+        obj.dir = vec2(1, 0);
+        spawnExplosion(obj.pos.add(obj.dir.scale(0)), 12);
 
-      //up
-      obj.dir = vec2(0, -1);
-      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 2);
+        //up
+        obj.dir = vec2(0, -1);
+        spawnExplosion(obj.pos.add(obj.dir.scale(20)), 2);
 
-      //down
-      obj.dir = vec2(0, 1);
-      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 22);
+        //down
+        obj.dir = vec2(0, 1);
+        spawnExplosion(obj.pos.add(obj.dir.scale(20)), 22);
 
-      //left
-      obj.dir = vec2(-1, 0);
-      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 10);
+        //left
+        obj.dir = vec2(-1, 0);
+        spawnExplosion(obj.pos.add(obj.dir.scale(20)), 10);
 
-      //right
-      obj.dir = vec2(1, 0);
-      spawnExplosion(obj.pos.add(obj.dir.scale(20)), 14);
-    });
+        //right
+        obj.dir = vec2(1, 0);
+        spawnExplosion(obj.pos.add(obj.dir.scale(20)), 14);
+
+        bombsNumber++;
+      });
+    } else {
+      return;
+    }
   }
 });
 
