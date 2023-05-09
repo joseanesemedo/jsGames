@@ -45,30 +45,30 @@ loadSprite("explosion", "./sprites/explosion.png", {
   sliceX: 5,
   sliceY: 5,
 });
-loadSprite("enemy1", "./sprites/enemy1.png", { sliceX: 3 });
-loadSprite("enemy2", "./sprites/enemy2.png", { sliceX: 3 });
-loadSprite("enemy3", "./sprites/enemy3.png", { sliceX: 3 });
+loadSprite("enemy1", "./sprites/Brown_Chicken.png", { sliceX: 1 });
+loadSprite("enemy2", "./sprites/Brown_Chicken.png", { sliceX: 1 });
+loadSprite("enemy3", "./sprites/Brown_Chicken.png", { sliceX: 1 });
 
 scene("game", () => {
   layers(["bg", "obj", "ui"], "obj");
 
   const maps = [
     [
-      "aaaaaaaaaaaaaaa",
-      "aj            a",
-      "a             a",
-      "a   %         a",
-      "a             a",
-      "a             a",
-      "a             a",
-      "a         #   a",
-      "a             a",
-      "a             a",
-      "a             a",
-      "a   @         a",
-      "a             a",
-      "a             a",
-      "aaaaaaaaaaaaaaa",
+      "aaaaaaaaaaaaaaaaaaaaaaaaa",
+      "aj                      a",
+      "a a a a a a a a a a a a a",
+      "a                       a",
+      "a                   #   a",
+      "a                       a",
+      "a      %                a",
+      "a                       a",
+      "a                       a",
+      "a            @          a",
+      "a                       a",
+      "a                       a",
+      "a                       a",
+      "a                       a",
+      "aaaaaaaaaaaaaaaaaaaaaaaaa",
 
       // "aaaaaaaaaaaaaaa",
       // "aj            a",
