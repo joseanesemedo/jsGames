@@ -23,14 +23,15 @@ body {
 }
 
 .wrapper {
-  width: 29rem;
+  width: 30rem;
   padding: 2.5rem 3rem;
   background-color: #fff;
-  border-radius: 0.5rem;
+  max-height: 900px;
 }
 
 .game__container {
   position: relative;
   width: 100%;
   display: grid;
+  gap: 0.6rem;
 }/*# sourceMappingURL=styles.css.map */
