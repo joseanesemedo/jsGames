@@ -2,7 +2,7 @@
 
 const moves = document.querySelector(".moves__count");
 const timeValue = document.querySelector(".time");
-const startButton = document.querySelector(".star");
+const startButton = document.querySelector(".start");
 const stopButton = document.querySelector(".stop");
 const gameContainer = document.querySelector(".game__container");
 const result = document.querySelector(".result");
@@ -74,7 +74,7 @@ const generateRandom = (size = 4) => {
   return cardValues;
 };
 
-const matrxiGenerator = (cardValues, size = 4) => {
+const matrixGenerator = (cardValues, size = 4) => {
   gameContainer.innerHTML = "";
   cardValues = [...cardValues, ...cardValues];
 
@@ -99,14 +99,79 @@ const matrxiGenerator = (cardValues, size = 4) => {
   }
 
   gameContainer.style.gridTemplateColumns = `repeat(${size},auto)`;
+
+  // cards
+  let firstCardValue;
+  cards = document.querySelectorAll(".card__container");
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      // if selected card is not matched yet then only run
+
+      if (!card.classList.contains("matched")) {
+        // flip the card
+        card.classList.add("flipped");
+
+        // if it is the first card
+        if (!firstCard) {
+          // so current card will become firstCard
+          firstCard = card;
+          firstCardValue = card.getAttribute("data-card-value");
+        } else {
+          movesCounter();
+          secondCard = card;
+          let secondCardValue = card.getAttribute("data-card-value");
+          if (firstCardValue === secondCardValue) {
+            // if both cards match add matched class so these cards woul be ignored next time
+            firstCardValue.classList.add("matched");
+            secondCardValue.classList.add("matched");
+
+            firstCard = false;
+            winCount++;
+
+            if (winCount === Math.floor(cardValues.length / 2)) {
+              result.innerHTML = `<h2>You won</h2>`;
+              stopGame();
+            }
+          } else {
+            // cards dont match
+            // flip cards back to normal
+            let [tempFirst, tempSecond] = [firstCard, secondCard];
+            firstCard = false;
+            secondCard = false;
+            let delay = setTimeout(() => {
+              tempFirst.classList.remove("flipped");
+              tempSecond.classList.remove("flipped");
+            }, 900);
+          }
+        }
+      }
+    });
+  });
 };
 
-// initial values and func calls
+// initial values and function calls
 const initializer = () => {
   result.innerText = "";
   let cardValues = generateRandom();
   console.log(cardValues);
-  matrxiGenerator(cardValues);
+  matrixGenerator(cardValues);
 };
 
-initializer();
+startButton.addEventListener("click", () => {
+  movesCount = 0;
+  seconds = 0;
+  minutes = 0;
+
+  controls.classList.add("hide");
+  stopButton.classList.remove("hide");
+  startButton.classList.add("hide");
+
+  interval = setInterval(timerGenerator, 1000);
+  moves.innerHTML = `<span>Moves:</span>${movesCount}`;
+  initializer();
+});
+
+stopButton.addEventListener("click", () => {
+  controls.classList.remove("hide");
+  stopButton.classList.add("hide");
+});
